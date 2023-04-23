@@ -1,0 +1,71 @@
+/*
+Para configurar VSCode para que use las herramientas de formateo black, pylint, autopep8 e isort al guardar un archivo Python, debes crear un archivo settings.json en el directorio .vscode de tu proyecto. Para hacerlo, sigue estos pasos:
+
+1. Abre tu proyecto en VSCode y haz clic en el icono de engranaje en la barra lateral izquierda para abrir la configuración de usuario.
+2. Haz clic en "Abrir configuración (JSON)" para abrir el archivo settings.json de VSCode.
+3. Agrega las siguientes líneas al archivo settings.json:
+
+{
+  "python.formatting.provider": "black",
+  "python.formatting.blackArgs": ["--line-length", "79"],
+  "editor.formatOnSave": true,
+  "python.linting.pylintEnabled": true,
+  "python.linting.pylintArgs": ["--disable=E0401"],
+  "python.linting.enabled": true,
+  "python.autoComplete.addBrackets": true,
+  "python.linting.autopep8Enabled": true,
+  "python.linting.autopep8Args": ["--max-line-length", "79"],
+  "python.linting.isortEnabled": true,
+  "python.linting.isortArgs": ["--line-length", "79", "--multi-line", "3", "--trailing-comma"],
+  "python.linting.mypyEnabled": false,
+}
+
+Estas líneas de configuración hacen lo siguiente:
+
+- `python.formatting.provider`: especifica que `black` es el formateador de código para Python.
+- `python.formatting.blackArgs`: especifica que se use una longitud de línea máxima de 79 caracteres para `black`.
+- `editor.formatOnSave`: activa el formateo de código en el guardado automático del archivo.
+- `python.linting.pylintEnabled`: activa la verificación de código con `pylint`.
+- `python.linting.pylintArgs`: deshabilita el error E0401 en `pylint`.
+- `python.linting.enabled`: activa la verificación de código Python en VSCode.
+- `python.autoComplete.addBrackets`: agrega automáticamente paréntesis a los completados de código.
+- `python.linting.autopep8Enabled`: activa la corrección de código con `autopep8`.
+- `python.linting.autopep8Args`: especifica que se use una longitud de línea máxima de 79 caracteres para `autopep8`.
+- `python.linting.isortEnabled`: activa la corrección de orden de importaciones con `isort`.
+- `python.linting.isortArgs`: especifica que se use una longitud de línea máxima de 79 caracteres y 3 líneas para las importaciones multilineales, y que se agregue una coma al final en `isort`.
+- `python.linting.mypyEnabled`: desactiva la verificación de tipos con `mypy`.
+
+Una vez que hayas agregado estas líneas al archivo settings.json, podrás usar las herramientas de formateo y verificación de código automáticamente en VSCode cada vez que guardes un archivo Python.
+*/
+
+{
+  "python.formatting.provider": "none",
+  "python.formatting.blackArgs": [
+    "--line-length",
+    "79"
+  ],
+  "editor.formatOnSave": true,
+  "python.linting.pylintEnabled": true,
+  "python.linting.pylintArgs": [
+    "--disable=E0401"
+  ],
+  "python.linting.enabled": true,
+  "python.autoComplete.addBrackets": true,
+  "python.linting.autopep8Enabled": true,
+  "python.linting.autopep8Args": [
+    "--max-line-length",
+    "79"
+  ],
+  "python.linting.isortEnabled": true,
+  "python.linting.isortArgs": [
+    "--line-length",
+    "79",
+    "--multi-line",
+    "3",
+    "--trailing-comma"
+  ],
+  "python.linting.mypyEnabled": false,
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+}
