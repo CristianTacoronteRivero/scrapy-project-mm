@@ -68,4 +68,5 @@ Una vez que hayas agregado estas líneas al archivo settings.json, podrás usar 
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter"
   },
+  "python.analysis.completeFunctionParens": true,
 }
