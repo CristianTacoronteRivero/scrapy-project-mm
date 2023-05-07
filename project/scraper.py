@@ -6,12 +6,13 @@ import logging
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+# from selenium.webdriver.chrome.service import Service
 
-from selenium.webdriver.common.by import By
+# from selenium.webdriver.common.by import By
 
 # Agregar la ruta de la carpeta al principio de sys.path
-ruta_carpeta =  os.getcwd()
+ruta_carpeta = os.getcwd()
 # La posicion 0 se encuentra reservada
 sys.path.append(ruta_carpeta)
 
@@ -24,19 +25,29 @@ else:
 
 from func import custom_func
 
+
 class EmptyResult(Exception):
     pass
 
 
 class Scraper:
     def __init__(self, path_service=str, headless: bool = True):
-        service = Service(path_service)
+        # service = Service(path_service)
+
+        # Configurar capacidades para el controlador de Chrome
+        capabilities = DesiredCapabilities.CHROME.copy()
+        capabilities["goog:loggingPrefs"] = {"browser": "ALL"}
 
         options = Options()
         if headless:
             options.add_argument("--headless")
+            options.add_argument("--disable-gpu")
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-dev-shm-usage")
 
-        self.driver = webdriver.Chrome(service=service, options=options)
+        self.driver = webdriver.Chrome(
+            options=options, desired_capabilities=capabilities
+        )
 
     def scrape(self, url) -> List[Tuple[str, str]]:
         self.driver.get(url)
@@ -75,33 +86,34 @@ class Scraper:
 
 
 if __name__ == "__main__":
+    print("¡Inicio de proceso!")
     custom_func.create_logging(os.path.basename(__file__))
 
     data = list()
 
-    scraper = Scraper(path_service="/usr/lib/chromium-browser/chromedriver")
+    scraper = Scraper(path_service="")
 
-    pag = 1
+    PAG = 1
     while True:
         try:
             result = scraper.scrape(
-                f"https://canarias.mediamarkt.es/collections/smartphones?tab=products&page={pag}"
+                f"https://canarias.mediamarkt.es/collections/smartphones?tab=products&page={PAG}"
             )
             # Comprueba si ha llegado al final
             if not result:
                 raise EmptyResult()
             # Concatena los datos
-            data = data + result
-            logging.info(f"Página {pag} escrapeada correctamente")
+            data += result
+            logging.info(f"Página {PAG} escrapeada correctamente")
             # Incrementa en +1 la pagina
-            pag += 1
+            PAG += 1
         # Captura cualquier error inesperado
         except EmptyResult:
-            logging.warning(f"Fin de scrapeo en la página {pag}")
+            logging.warning(f"Fin de scrapeo en la página {PAG - 1}")
             break
         except Exception as e:
-            logging.error(f"Error inesperado. Total: {pag}")
+            logging.error(f"Error inesperado. Total: {PAG - 1}")
             break
 
-    data_frame = pd.DataFrame(data, columns = ["device", "price"])
+    data_frame = pd.DataFrame(data, columns=["device", "price"])
     print(data_frame)
